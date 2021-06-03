@@ -1,0 +1,212 @@
+
+
+.vcenter{
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+.no-padding{
+    padding: 0;margin: 0;
+}
+
+#action-bar{
+    background-color: #1b6d85;
+    color: #fff;
+    padding: 0.6em 0;
+}
+
+#menu-icon{
+    margin-top: 2px;
+}
+#menu-icon .dot{
+    display: none;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+.dot-red{
+    background-color: red;
+}
+.dot-green{
+    background-color: green;
+}
+
+.talk2dev .dot{
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+}
+
+#menu-header{
+    margin-bottom: 1em;
+}
+#page{
+    position: absolute;
+    margin-top: 2.4em;
+}
+
+#action-bar #activity-name{
+    margin-left: 0.7em;
+    font-size: 1.2em;
+}
+#content{
+    margin-top: 0.5em;
+}
+#quick-menu{
+    display: none;
+}
+
+
+#back-btn{
+	display: none;
+    position: absolute;
+    left: 0px;
+    top: 5px;
+    cursor: pointer;
+    padding: 2px 5px;
+}
+#back-btn:hover{
+//background-color: #fff;
+//border-radius: 50%;
+}
+#back-btn img{
+    width: 25px;
+    height: 25px;
+}
+
+
+
+
+
+
+
+
+
+/* simple popup start */
+.darken-screen{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 0;
+    display: none;
+}
+#simple-popup{
+    position: fixed;
+    width: 90%;
+    display: none;
+
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    z-index: 10;
+    background: #ffffff;
+    color: #000;
+    opacity: 0;
+    font-size: 1.2em;
+}
+#simple-popup .popup-title-bar{
+    background-color: #000;
+    color: #e7e7e7;
+    padding: 0.4em 0.8em;
+}
+#simple-popup .popup-title-bar .cross-btn{
+    position: absolute;
+    right: 5px;
+    top: 4px;
+    padding-left: 5px;
+    border-left: 1px solid #3a3a3a;
+}
+#simple-popup .popup-title-bar .cross-btn img{
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+#simple-popup .popup-body{
+    padding: 0.5em 0.5em 0 0.5em;
+}
+/* simple popup end */
+
+
+
+
+
+
+
+/* custom popup start */
+.dark-screen{
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 4;
+}
+#custom-popup{
+    position: fixed;
+    width: 90%;
+    display: none;
+
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    z-index: 100;
+    background: #ffffff;
+    color: #000;
+    opacity: 0;
+    font-size: 1.2em;
+    border: 1px solid #000;
+}
+
+#custom-popup .popup-title-bar{
+    background-color: #000;
+    color: #e7e7e7;
+    padding: 0.4em 0.5em;
+}
+#custom-popup .popup-title-bar .cross-btn{
+    position: absolute;
+    right: 5px;
+    top: 4px;
+    padding-left: 5px;
+    border-left: 1px solid #3a3a3a;
+}
+#custom-popup .popup-title-bar .cross-btn img{
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+#custom-popup .popup-body{
+    padding: 0.5em 0.5em 0 0.5em;
+    font-size: 0.9em;
+    color: #535353;
+}
+#custom-popup .bottom-line{
+    padding: 0.7em 0.5em 0.5em 0.5em;
+}
+
+.action-btn-wrapper{
+    background-color: #ededed;
+    border-top: 1px solid #aaaaaa;
+}
+.positive-btn, .negative-btn{
+    font-size: 1.1em;
+    padding: 3px 0;
+    cursor: pointer;
+}
+.action-btn-wrapper .positive-btn{
+    color: green;
+    background-color: rgba(5, 180, 5, 0.05);
+}
+.action-btn-wrapper .negative-btn{
+    border-left: 1px solid #aaaaaa;
+    color: #b40000;
+    background-color: rgba(180, 5, 5, 0.05);
+}
+
+/* custom popup end */

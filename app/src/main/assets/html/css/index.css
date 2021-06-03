@@ -1,0 +1,86 @@
+
+
+
+
+body{
+	//font-size: 1.2em;
+	//background-image: url("../images/bg/bg28.jpg");
+    //background-image: linear-gradient(rgba(0, 50, 0, 0.05), rgba(0, 50, 0, 0.05)), url("../images/bg/bg28.jpg");
+
+
+}
+
+
+
+#initial-wait-box{
+    margin-top: 7em;
+}
+#initial-wait-box .msg1{
+    font-size: 2em;
+    color: #0000cb;
+}
+#initial-wait-box .msg2{
+    font-size: 1.5em;
+    font-family: "Courier New" , serif;
+    //color: #878787;
+}
+#initial-wait-box .msg3{
+    margin-top: 2em;
+    font-size: 2.4em;
+}
+
+
+
+#bottom-popup{
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+    background-color: #355676;
+    color: #ffffff;
+    opacity: 0;
+}
+#bottom-popup .content{
+    padding: 5px 10px;
+    font-weight: lighter;
+    font-size: 1.2em;
+    font-family: 'Nunito Sans', sans-serif;
+}
+#bottom-popup .actions{
+    border-top: 1px solid #162d41;
+    margin-top: 20px;
+}
+#bottom-popup .positive-btn{
+    
+    background-color: #325270;
+    color: #26ff01;
+    padding: 5px 0;
+    border-right: 1px solid #162d41;
+}
+#bottom-popup .negative-btn{
+    background-color: rgba(50, 82, 112, 0.74);
+    color: #c5c5c5;
+    padding: 5px 0;
+}
+
+
+
+#footer{
+    display: none;
+    background-color: rgba(211, 227, 249, 0.4);
+    border-top: 1px solid rgba(204, 220, 241, 0.56);
+    color: #01697a;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    padding: 0 10px;
+}
+#info-icon{
+    font-style: italic;
+    font-family: "Courier New" , serif;
+    font-size: 1.2em;
+    background-color: rgba(170, 206, 241, 0.58);
+    border: 1px solid #01788b;
+    color: #01697a;
+    padding: 0 5px;
+    border-radius: 50%;
+}
