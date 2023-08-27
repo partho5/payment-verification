@@ -8,8 +8,7 @@ import java.util.UUID;
 public class ApiUtils {
 
     public String baseDomain(){
-        //return "http://undried-pats.000webhostapp.com";
-        return "http://wordmas.com";
+        return "https://jovoc.com";
     }
 
     public String deviceId(){

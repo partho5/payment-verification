@@ -1,14 +1,18 @@
 package com.wordmas.payment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.provider.Settings;
@@ -17,6 +21,17 @@ import android.telephony.SmsMessage;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
+
+import androidx.core.content.ContextCompat;
+
+import com.wordmas.payment.api.ApiUtils;
+import com.wordmas.payment.database.AppDatabase;
+import com.wordmas.payment.database.DatabaseClient;
+import com.wordmas.payment.model.SMS;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -30,121 +45,110 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
-
-import com.wordmas.payment.api.ApiUtils;
-import com.wordmas.payment.database.AppDatabase;
-import com.wordmas.payment.database.DatabaseClient;
-import com.wordmas.payment.model.SMS;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 public class SmsBroadcastReceiver extends BroadcastReceiver {
 
     SmsMessage smsMessage;
     String payerNum = null, amount = null, trxId = null, receivedAt = null, paymentMethod = null, message = null, senderAddress;
     CommonLibrary Library = new CommonLibrary();
     ApiUtils apiUtils = new ApiUtils();
+    int smsIterateLimit = 500;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
         Log.d("startTime", System.currentTimeMillis() + "");
-
         try {
-            SmsMessage[] msgs = Telephony.Sms.Intents.getMessagesFromIntent(intent);
-            smsMessage = msgs[0];
-            senderAddress = smsMessage.getDisplayOriginatingAddress();
-            message = smsMessage.getDisplayMessageBody();
+            Log.d("smsReceived", "intent=" + intent.getAction());
+            this.smsMessage = Telephony.Sms.Intents.getMessagesFromIntent(intent)[0];
+            this.senderAddress = this.smsMessage.getDisplayOriginatingAddress();
+            this.message = this.smsMessage.getDisplayMessageBody();
+            String str = this.senderAddress;
 
-            displayNotification(context, senderAddress, message);
+            Log.d("smsReceivedMilis", this.smsMessage.getTimestampMillis()+"");
+
+            Library.displayNotification(context, str, "SMS received => " + this.message);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-//        //smsMessage.getTimestampMillis()
-//
-//        if(message.contains("TrxID")){
-//            //bkash payment received by "send money" option
-//            paymentMethod = "bKash";
-//            BkashSmsParser bkashSmsParser = new BkashSmsParser(message);
-//            Log.d("bKash", "sender="+bkashSmsParser.getSender()+" amount="+bkashSmsParser.getAmount()+" TrxId="+bkashSmsParser.getTrxID()+" time="+bkashSmsParser.getReceivedAt());
-//            //Toast.makeText(context, "sender="+bkashSmsParser.getSender()+" amount="+bkashSmsParser.getAmount()+" TrxId="+bkashSmsParser.getTrxID()+" time="+bkashSmsParser.getReceivedAt(), Toast.LENGTH_LONG).show();
-//            payerNum = bkashSmsParser.getSender();
-//            amount = bkashSmsParser.getAmount();
-//            trxId = bkashSmsParser.getTrxID();
-//            receivedAt = bkashSmsParser.getReceivedAt();
-//
-//        }
-//        displayNotification(context, senderAddress, message);
-//        Log.d("mySms", senderAddress+"-----"+message);
 
-        int limit = 100;
-        ContentResolver cr = context.getContentResolver();
+        class SMSiterator extends AsyncTask<Object, Void, List<Object>>{
+            List<Object> returnList = new ArrayList<>();
+            boolean bKashSendMoneyReceived = false;
+            @Override
+            protected List<Object> doInBackground(Object... objects) {
+                try {
+                    Cursor c = context.getContentResolver().query(Telephony.Sms.Inbox.CONTENT_URI, new String[]{"_id", "address", "body", "date_sent"}, (String) null, (String[]) null, "date DESC");
+                    int totalSMS = c.getCount();
+                    if (c.moveToFirst()) {
+                        int i = 0;
+                        while (true) {
+                            if (i >= totalSMS) {
+                                break;
+                            }
+                            int smsId = c.getInt(0);
+                            String senderAddress2 = c.getString(1);
+                            String message2 = c.getString(2);
+                            String string = c.getString(3);
 
-        Cursor c = cr.query(Telephony.Sms.Inbox.CONTENT_URI,
-                new String[]{
-                        Telephony.Sms.Inbox._ID, Telephony.Sms.Inbox.ADDRESS,
-                        Telephony.Sms.Inbox.BODY, Telephony.Sms.Inbox.DATE_SENT
-                },
-                null, null, Telephony.Sms.Inbox.DEFAULT_SORT_ORDER);
-        int totalSMS = c.getCount();
+                            @SuppressLint("Range")
+                            long receivedTimeMillis = c.getLong(c.getColumnIndex("date_sent"));
 
-        if (c.moveToFirst()) {
-            for (int i = 0; i < totalSMS; i++) {
-//                Log.d("mySms", c.getInt(0)+" ---"
-//                        +c.getString(1)+"----"+c.getString(2)+
-//                        "----"+c.getString(3) );
-
-                int smsId = c.getInt(0);
-                String senderAddress = c.getString(1);
-                String message = c.getString(2);
-                String sentTimeMilis = c.getString(3);
-
-                SMS sms = new SMS();
-                sms.setSmsId(smsId);
-                sms.setMessage(message);
-                sms.setSenderAddress(senderAddress);
-                sms.setSentToServer(false);
-
-                if (message.contains("You have received Tk")) {
-                    insertSms(context, sms);
+                            SMS sms = new SMS();
+                            sms.setSmsId(smsId);
+                            sms.setMessage(message2);
+                            sms.setSenderAddress(senderAddress2);
+                            sms.setSentToServer(false);
+                            if (message2.contains("You have received Tk")) {
+                                insertSms(context, sms);
+                                bKashSendMoneyReceived = true;
+                            }
+                            c.moveToNext();
+                            if (i >= smsIterateLimit) {
+                                break;
+                            }
+                            i++;
+                        }
+                    } else {
+                        Log.d("noSms", "Inbox empty");
+                    }
+                    c.close();
+                } catch (Exception e2) {
+                    e2.printStackTrace();
                 }
 
-                c.moveToNext();
-                if (i >= limit) break;
-            }
-        } else {
-            //throw new RuntimeException("You have no SMS in Inbox");
-            Log.d("noSms", "Inbox empty");
-        }
-        c.close();
 
+                returnList.add(bKashSendMoneyReceived);
 
-        if (Library.isNetworkAvailable(context)) {
-            syncPayments(context);
-            try {
-                Thread.sleep(2*60*1000);//2 min
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                return returnList;
             }
-        }else{
-            try {
-                setMobileNetwork(context, 1);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            try {
-                Thread.sleep(1000);
-                Intent i = new Intent(context, SmsBroadcastReceiver.class);
-                context.sendBroadcast(i);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+
+            @Override
+            protected void onPostExecute(List<Object> objects) {
+                super.onPostExecute(objects);
+
+                boolean bKashSendMoneyReceived = (boolean) objects.get(0); //bKashSendMoneyReceived
+
+                if(bKashSendMoneyReceived){
+                    // This value gets always true. fix it. Even if don't fix, it will work. Just fixing will optimize app
+                    Log.d("smsSync", "Yes bKashSendMoneyReceived !");
+
+                    if (Library.isNetworkAvailable(context)) {
+                        Log.d("smsSync", "going to be synced");
+                        syncPayments(context);
+                    } else {
+                        Log.d("smsSync", "NO internet");
+                        Library.displayNotification(context, "Turn on internet ! Sync payment !", "Someone made a payment via bKash. But couldn't sync !");
+                    }
+                }else{
+                    Log.d("smsSync", "NO bKashSendMoneyReceived");
+                }
             }
         }
-    }
+
+        new SMSiterator().execute();
+
+
+    }//onReceive()
 
 
     void insertSms(Context context, SMS sms) {
@@ -370,20 +374,6 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
 
 
 
-    void displayNotification(Context context, String title, String details) {
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("simplifiedcoding", "simplifiedcoding", NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager.createNotificationChannel(channel);
-        }
-
-        NotificationCompat.Builder notification = new NotificationCompat.Builder(context, "simplifiedcoding")
-                .setContentTitle(title)
-                .setContentText(details)
-                .setSmallIcon(R.mipmap.ic_launcher);
-;
-        notificationManager.notify((int) System.currentTimeMillis(), notification.build());
-    }
 
 }

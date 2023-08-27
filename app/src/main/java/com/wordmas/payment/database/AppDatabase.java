@@ -11,7 +11,7 @@ import com.wordmas.payment.model.SMS;
         entities = {
                 SMS.class
         },
-        version = 5, exportSchema = true
+        version = 5, exportSchema = false
 )
 public abstract class AppDatabase extends RoomDatabase {
     public abstract SMSdao smSdao();

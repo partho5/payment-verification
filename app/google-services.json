@@ -1,0 +1,106 @@
+{
+  "project_info": {
+    "project_number": "750089093564",
+    "firebase_url": "https://hardwarecontroller1.firebaseio.com",
+    "project_id": "hardwarecontroller1",
+    "storage_bucket": "hardwarecontroller1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:750089093564:android:095b85af94c0fe5f04ebb9",
+        "android_client_info": {
+          "package_name": "com.wordmas.payment"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "750089093564-sn1etme6610mbva2dpbqed7ob3jm4qhp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqM87YLpZz6BHkIqT676bRrxb85FWwzac"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "750089093564-sn1etme6610mbva2dpbqed7ob3jm4qhp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:750089093564:android:1d14c3f500e4348404ebb9",
+        "android_client_info": {
+          "package_name": "com.wordmas.payment"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "750089093564-sn1etme6610mbva2dpbqed7ob3jm4qhp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqM87YLpZz6BHkIqT676bRrxb85FWwzac"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "750089093564-sn1etme6610mbva2dpbqed7ob3jm4qhp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:750089093564:android:50f3686dfc8deb4704ebb9",
+        "android_client_info": {
+          "package_name": "com.wordmas.payment"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "750089093564-vlje8s8d626m4unlc7c55dea1thna8tk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wordmas.payment",
+            "certificate_hash": "acd4b7a69444a11d4e7a7545c90b192dd1fa4bc6"
+          }
+        },
+        {
+          "client_id": "750089093564-sn1etme6610mbva2dpbqed7ob3jm4qhp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqM87YLpZz6BHkIqT676bRrxb85FWwzac"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "750089093564-sn1etme6610mbva2dpbqed7ob3jm4qhp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

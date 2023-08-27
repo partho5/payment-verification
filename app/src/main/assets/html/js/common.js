@@ -3,7 +3,7 @@
 
 
 
-window.baseDomain = "http://wordmas.com";
+window.baseDomain = "http://jovoc.com";
 window.version = baseDomain+"/version";
 
 
